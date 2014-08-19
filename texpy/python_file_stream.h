@@ -239,6 +239,11 @@ class python_file_buffer : public std::basic_streambuf<char>
       read_buffer = py_read(buffer_size);
       char *read_buffer_data;
       python::ssize_t py_n_read;
+
+#if PY_MAJOR_VERSION > 2
+    // PyString_* functions have been renamed to PyBytes_* in Python 3.x.
+    #define PyString_AsStringAndSize(x,y,z) PyBytes_AsStringAndSize(x,y,z)
+#endif
       if (PyString_AsStringAndSize(read_buffer.ptr(),
                                    &read_buffer_data, &py_n_read) == -1) {
         setg(0, 0, 0);

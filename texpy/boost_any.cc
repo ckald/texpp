@@ -23,6 +23,20 @@
 
 #include <string>
 
+// In Python 3, all integer objects internally are represented as
+// "long integers".  PyInt_Check was renamed to the PyLong equivalents.
+// PyInt_Check in Python 2 equates to PyLong_Check in Python 3
+
+#if PY_MAJOR_VERSION > 2
+    #define PyInt_Check(x)      PyLong_Check(x)
+    #define PyInt_AS_LONG(x)    PyLong_AsLong(x)
+
+    // functions PyString_* have been renamed to PyBytes_* in Python 3.x.
+    #define PyString_Check(x)      PyBytes_Check(x)
+    #define PyString_AS_STRING(x)  PyBytes_AS_STRING(x)
+    #define PyString_GET_SIZE(x)   PyBytes_GET_SIZE(x)
+#endif
+
 namespace {
 
   struct boost_any_to_python_object
